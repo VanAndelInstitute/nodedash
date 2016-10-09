@@ -24,16 +24,25 @@ public class Dashboard extends Composite
 
 	interface DashboardUiBinder extends UiBinder<Widget, Dashboard> {}
 	private final ClusterInfoServiceAsync clusterService = GWT.create(ClusterInfoService.class);
-	@UiField VerticalLayoutContainer vlc;
-//	@UiField HorizontalLayoutContainer hlc1;
-//	@UiField HorizontalLayoutContainer hlc2;
+	VerticalLayoutContainer vlc = new VerticalLayoutContainer();
+	VerticalLayoutContainer vlc2 = new VerticalLayoutContainer();
+	@UiField HorizontalLayoutContainer hlc;
+	@UiField VerticalLayoutContainer main;
     Boolean preloadAreaChart = true;
 	public Dashboard()
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		vlc.setWidth(com.google.gwt.user.client.Window.getClientWidth()-10);
-		vlc.setHeight(com.google.gwt.user.client.Window.getClientHeight()-20);
-		vlc.setScrollMode(ScrollMode.AUTO);
+		
+		main.setWidth(com.google.gwt.user.client.Window.getClientWidth() - 10);
+		main.setWidth(com.google.gwt.user.client.Window.getClientWidth() - 20);
+		main.setScrollMode(ScrollMode.AUTO);
+		
+//		vlc.setWidth(com.google.gwt.user.client.Window.getClientWidth() / 2);
+//		vlc2.setWidth(com.google.gwt.user.client.Window.getClientWidth() / 2);
+//		vlc.setHeight(com.google.gwt.user.client.Window.getClientHeight()-20);
+//		vlc2.setHeight(com.google.gwt.user.client.Window.getClientHeight()-20);
+//		vlc.setScrollMode(ScrollMode.AUTO);
+//		vlc2.setScrollMode(ScrollMode.AUTO);
 		
 		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
 
@@ -51,10 +60,10 @@ public class Dashboard extends Composite
 		
 		vlc.add(nodespct);
 		vlc.add(runningJobs);
-		vlc.add(allTimeJobs);
-		vlc.add(loadavg);
-		
-		
+		vlc2.add(allTimeJobs);
+		vlc2.add(loadavg);
+		hlc.add(vlc);
+		hlc.add(vlc2);
 		
 		Timer t = new Timer(){
 

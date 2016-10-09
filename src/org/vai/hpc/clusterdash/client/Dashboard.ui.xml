@@ -26,13 +26,15 @@
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
     <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
   </ui:with>
-
-<container:VerticalLayoutContainer ui:field="vlc" layoutData="{verticalLayoutData}"> 
+<container:VerticalLayoutContainer ui:field="main" > 
+ <container:HorizontalLayoutContainer ui:field="hlc"/>
+</container:VerticalLayoutContainer>
+ 
 <!-- <container:child> -->
 <!--   <container:HorizontalLayoutContainer ui:field="hlc1" height="400" /> -->
 <!--  </container:child> -->
 <!--  <container:child> -->
 <!--   <container:HorizontalLayoutContainer ui:field="hlc2" height="400"/> -->
 <!--   </container:child> -->
-</container:VerticalLayoutContainer>
+
 </ui:UiBinder>
