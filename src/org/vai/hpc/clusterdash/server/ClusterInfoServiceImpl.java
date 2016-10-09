@@ -1,5 +1,14 @@
 package org.vai.hpc.clusterdash.server;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+import org.vai.hpc.clusterdash.client.ClusterData;
 import org.vai.hpc.clusterdash.client.ClusterInfoService;
 import org.vai.hpc.clusterdash.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -11,39 +20,52 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class ClusterInfoServiceImpl extends RemoteServiceServlet implements ClusterInfoService
 {
 
-	public String greetServer(String input) throws IllegalArgumentException
+	@Override
+	public ArrayList<ClusterData> getCluster()
 	{
-		// Verify that the input is valid. 
-		if (!FieldVerifier.isValidName(input))
+		ArrayList<ClusterData> ret = new ArrayList<ClusterData>();
+		try
 		{
-			// If the input is not valid, throw an IllegalArgumentException back to
-			// the client.
-			throw new IllegalArgumentException("Name must be at least 4 characters long");
+			
+			URL url = new URL("http://login.hpc.vai.org/pbsnodezTxt.txt");
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			String line = null;
+
+			while((line = in.readLine()) != null) 
+			{
+				ClusterData d = new ClusterData();
+				String[] parts = line.split("\\s+");
+				d.setNodeName(parts[0]);
+				d.setCoresAvail(Integer.parseInt(parts[1]));
+				d.setLoad(Double.parseDouble(parts[2]));
+				
+				if(parts.length > 3)
+				{
+					String[] users = parts[3].split(",");
+					d.setUsers(new ArrayList<String>(Arrays.asList(users)));
+				
+					String[] coresUsedStr = parts[4].split(",");
+					ArrayList<Integer> coresUsed = new ArrayList<Integer>();
+					for(String str : coresUsedStr)
+						coresUsed.add(Integer.parseInt(str));
+					d.setCoresUsed(coresUsed);
+					
+					String[] jobsIdsStr = parts[5].split(",");
+					ArrayList<Integer> jobsIds = new ArrayList<Integer>();
+					for(String str : jobsIdsStr)
+						jobsIds.add(Integer.parseInt(str));
+					d.setJobIds(jobsIds);
+				}
+				ret.add(d);
+				
+			}
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		String serverInfo = getServletContext().getServerInfo();
-		String userAgent = getThreadLocalRequest().getHeader("User-Agent");
-
-		// Escape data from the client to avoid cross-site script vulnerabilities.
-		input = escapeHtml(input);
-		userAgent = escapeHtml(userAgent);
-
-		return "Hello, " + input + "!<br><br>I am running " + serverInfo + ".<br><br>It looks like you are using:<br>" + userAgent;
+		return ret;
 	}
 
-	/**
-	 * Escape an html string. Escaping data received from the client helps to
-	 * prevent cross-site script vulnerabilities.
-	 * 
-	 * @param html the html string to escape
-	 * @return the escaped string
-	 */
-	private String escapeHtml(String html)
-	{
-		if (html == null)
-		{
-			return null;
-		}
-		return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-	}
+
 }

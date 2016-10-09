@@ -1,5 +1,7 @@
 package org.vai.hpc.clusterdash.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -7,5 +9,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface ClusterInfoServiceAsync
 {
-	void greetServer(String input, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void getCluster(AsyncCallback<ArrayList<ClusterData>> callback);
 }

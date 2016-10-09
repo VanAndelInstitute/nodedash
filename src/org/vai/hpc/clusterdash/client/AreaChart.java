@@ -7,9 +7,11 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.chart.client.chart.Chart;
-import com.sencha.gxt.chart.client.chart.axis.GaugeAxis;
-import com.sencha.gxt.chart.client.chart.series.GaugeSeries;
+import com.sencha.gxt.chart.client.chart.Chart.Position;
+import com.sencha.gxt.chart.client.chart.axis.NumericAxis;
+import com.sencha.gxt.chart.client.chart.series.AreaSeries;
 import com.sencha.gxt.chart.client.draw.RGB;
+import com.sencha.gxt.chart.client.draw.path.PathSprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
@@ -18,44 +20,42 @@ import com.sencha.gxt.fx.client.easing.ElasticIn;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 
-public class ClusterGuage extends Composite 
+public class AreaChart extends Composite 
 {
 
 	private static ClusterGuageUiBinder uiBinder = GWT.create(ClusterGuageUiBinder.class);
-
-	interface ClusterGuageUiBinder extends UiBinder<Widget, ClusterGuage>{}
+    
+	interface ClusterGuageUiBinder extends UiBinder<Widget, AreaChart>{}
 	@UiField VerticalLayoutContainer chartPanel;
+	@UiField Label header;
+	@UiField Label footer;
+	int offset = 0; 
 	final ListStore<Double> store = new ListStore<Double>(new ModelKeyProvider<Double>(){
 		@Override
 		public String getKey(Double item)
 		{
-			return item.toString();
+			return ""  + (offset++) + " " + item;
 		}});
-	final GaugeSeries<Double> gauge = new GaugeSeries<Double>();
+	final AreaSeries<Double> areaSeries = new AreaSeries<Double>();
     final Chart<Double> chart = new Chart<Double>();
-    Label chartText;
-	@UiField Label header;
-	@UiField Label footer;
-	public ClusterGuage(String header, String footer)
+	 
+	public AreaChart(String header, String footer)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		this.header.setText(header);
 		this.footer.setText(footer);
-		store.add(0.0);
-		final GaugeAxis<Double> axis = new GaugeAxis<Double>();
-	    axis.setMargin(0);
-	    axis.setDisplayGrid(false);
-	    axis.setMinimum(0);
-	    axis.setMaximum(100);
-	    TextSprite t = new TextSprite();
-	    t.setHidden(true);
-	    axis.setLabelConfig(t);  
-	    	   
-	    gauge.addColor(new RGB("#FFF"));
-	    gauge.addColor(new RGB("#292929"));
-	    gauge.setStrokeWidth(50);
+	
+		for (int i = 0; i < 20; i++)
+			store.add(1420.0 + i);
+		
+		
+		PathSprite gridConfig = new PathSprite();
+	    gridConfig.setStroke(new RGB("#bbb"));
+	    gridConfig.setFill(new RGB("#ddd"));
+	    gridConfig.setZIndex(1);
+	    gridConfig.setStrokeWidth(1);
 	    
-	    gauge.setAngleField(new ValueProvider<Double,Double>(){
+	    ValueProvider<Double,Double> doubleVP = new ValueProvider<Double,Double>(){
 
 			@Override
 			public Double getValue(Double object)
@@ -74,9 +74,21 @@ public class ClusterGuage extends Composite
 			public String getPath()
 			{
 				return "val";
-			}});
-	    gauge.setNeedle(false);
-	    gauge.setDonut(30);
+			}};
+	    
+	    
+	      
+		final NumericAxis<Double> axis = new NumericAxis<Double>();
+		axis.setPosition(Position.LEFT);
+		TextSprite t = new TextSprite();
+		t.setFill(new RGB("#FFF"));
+		axis.setLabelConfig(t);
+	    axis.addField(doubleVP);
+	    axis.setDisplayGrid(false);
+	  
+	    areaSeries.setYAxisPosition(Position.LEFT);
+	    areaSeries.addYField(doubleVP);	   
+	    areaSeries.addColor(new RGB("#FFF"));
 
 	   
 	    chart.setHeight(chartPanel.getOffsetHeight());
@@ -86,23 +98,18 @@ public class ClusterGuage extends Composite
 	    chart.setAnimationEasing( new ElasticIn());
 	    chart.setDefaultInsets(1);
 	    chart.addAxis(axis);
-	    chart.addSeries(gauge);
-	    chart.setAnimated(true);
+	    chart.addSeries(areaSeries);
 	    chart.setBackground(new RGB("#005a9b"));
-	    chartPanel.add(chart,new VerticalLayoutData(1.0, 1.0));
-	    chartText = new Label(store.get(0).toString());
-	    chartText.setStyleName("chartLabel");
-	    chartPanel.add(chartText);
-	    setValue(55.0);
+	    chart.setAnimated(true);
+	    chartPanel.add(chart,new VerticalLayoutData(1.0, 1.0));	
+	    
 	}
 	
-	public void setValue(Double d)
+	public void addValue(Double d)
 	{
-		store.clear();
+		store.remove(0);
 		store.add(d);
 		chart.redrawChart();
-		if(chartText != null)
-			chartText.setText(d.toString() + "%");
 	}
 	public void setHeader(String s)
 	{
