@@ -32,7 +32,7 @@ public class WidgetMonitor extends Composite
 		this.footer.setText(footer);
 	}
 	
-	public void setValue(Widget s)
+	public void setContent(Widget s)
 	{
 		chartPanel.clear();
 		chartPanel.add(s);

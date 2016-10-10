@@ -1,74 +1,68 @@
 /** Add css rules here for your application. */
-
 body {
-    background-color: black;
+	background-color: black;
 }
 
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+.gaugeChartLabel {
+	color: #006aab;
+	font-size: 50px;
+	position: relative;
+	left: 200px !important;
+	top: -150px !important;
+	width: 20%;
+	font-family: Verdana;
+	z-index: 1;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.areaChartLabel {
+	color: #006aab;
+	font-size: 20px;
+	position: relative;
+	left: 320px !important;
+	top: -100px !important;
+	width: 30%;
+	font-family: Verdana;
+	z-index: 1;
 }
-
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
-}
-
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
-}
-.chartLabel {
-  color: #005a9b;
-  font-size: 50px;
-  position: relative;
-  left: 200px !important;
-  top: -150px !important;
-  width: 20%;
-  z-index: 1;
-  }
 
 .chartHeaderText {
-  color: #F0F8FF;
-  font-size: 30px;
-  text-align: center;
+	color: #E0E8FF;
+	font-size: 30px;
+	text-align: center;
+	font-family: Verdana;
 }
 
 .chartFooterText {
-  color: #ADD8E6;
-  font-size: 20px;
-  text-align: center;
+	color: #ADD8E6;
+	font-size: 20px;
+	text-align: center;
+	font-family: Verdana;
 }
-
 
 .textChartMeasurement {
-	 color: white;
-	 background-color: #005a9b;
-	 font-size: 200px;
-	 text-align: center;
-	 vertical-align: middle;
+	color: white;
+	background-color: #005a9b;
+	font-size: 150px;
+	text-align: center;
+	vertical-align: middle;
 }
 
-.topLevelContainer
-{
-	 background-color: #005a9b;
-	 margin: 10px 5px 10px 5px; !important;
-	 padding: 10px;
+.topLevelContainer {
+	background-color: #005a9b;
+	margin: 10px 5px 10px 5px; ! important;
+	padding: 10px;
+}
+
+.topUsersEntry:before {
+    content:"• ";
+}
+.topUsersEntry {
+	color: #FFF;
+	font-size: 33px;
+	margin-left: 80px;
+	font-family: Verdana;
+}
+
+.widgetContainer {
+	padding: 20px;
 }

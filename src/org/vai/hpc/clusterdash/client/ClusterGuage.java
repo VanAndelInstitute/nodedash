@@ -91,7 +91,7 @@ public class ClusterGuage extends Composite
 	    chart.setBackground(new RGB("#005a9b"));
 	    chartPanel.add(chart,new VerticalLayoutData(1.0, 1.0));
 	    chartText = new Label(store.get(0).toString());
-	    chartText.setStyleName("chartLabel");
+	    chartText.setStyleName("gaugeChartLabel");
 	    chartPanel.add(chartText);
 	    setValue(55.0);
 	}

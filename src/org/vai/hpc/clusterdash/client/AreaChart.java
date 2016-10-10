@@ -29,6 +29,8 @@ public class AreaChart extends Composite
 	@UiField VerticalLayoutContainer chartPanel;
 	@UiField Label header;
 	@UiField Label footer;
+	Boolean showChartLabel = false;
+	Label chartText;
 	int offset = 0; 
 	final ListStore<Double> store = new ListStore<Double>(new ModelKeyProvider<Double>(){
 		@Override
@@ -39,11 +41,12 @@ public class AreaChart extends Composite
 	final AreaSeries<Double> areaSeries = new AreaSeries<Double>();
     final Chart<Double> chart = new Chart<Double>();
 	 
-	public AreaChart(String header, String footer)
+	public AreaChart(String header, String footer, Boolean showChartLabel)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		this.header.setText(header);
 		this.footer.setText(footer);
+		this.showChartLabel = showChartLabel;
 	
 		for (int i = 0; i < 20; i++)
 			store.add(1420.0 + i);
@@ -90,8 +93,7 @@ public class AreaChart extends Composite
 	    areaSeries.addYField(doubleVP);	   
 	    areaSeries.addColor(new RGB("#FFF"));
 
-	   
-	    chart.setHeight(chartPanel.getOffsetHeight());
+	    chart.setHeight(chartPanel.getOffsetHeight() - (showChartLabel ? 60 : 0) );
 	    chart.setWidth(chartPanel.getOffsetWidth());
 	    chart.setStore(store);
 	    chart.setAnimationDuration(1750);
@@ -101,7 +103,13 @@ public class AreaChart extends Composite
 	    chart.addSeries(areaSeries);
 	    chart.setBackground(new RGB("#005a9b"));
 	    chart.setAnimated(true);
-	    chartPanel.add(chart,new VerticalLayoutData(1.0, 1.0));	
+	    chartPanel.add(chart,new VerticalLayoutData(1.0, 1.0));
+	    if(showChartLabel == true)
+	    {
+		    chartText = new Label(store.get(store.size()-1).toString());
+		    chartText.setStyleName("areaChartLabel");
+		    chartPanel.add(chartText);
+	    }
 	    
 	}
 	
@@ -110,7 +118,19 @@ public class AreaChart extends Composite
 		store.remove(0);
 		store.add(d);
 		chart.redrawChart();
+		if(chartText != null)
+			chartText.setText(d.toString());
 	}
+	
+	public void addValue(Double d, String label)
+	{
+		store.remove(0);
+		store.add(d);
+		chart.redrawChart();
+		if(chartText != null)
+			chartText.setText(label);
+	}
+	
 	public void setHeader(String s)
 	{
 		header.setText(s);
