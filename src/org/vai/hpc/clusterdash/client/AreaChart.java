@@ -3,6 +3,7 @@ package org.vai.hpc.clusterdash.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,6 +30,8 @@ public class AreaChart extends Composite
 	@UiField VerticalLayoutContainer chartPanel;
 	@UiField Label header;
 	@UiField Label footer;
+	@UiField Label updateTimerText;
+	int age=0;
 	Boolean showChartLabel = false;
 	Label chartText;
 	int offset = 0; 
@@ -48,10 +51,6 @@ public class AreaChart extends Composite
 		this.footer.setText(footer);
 		this.showChartLabel = showChartLabel;
 	
-		for (int i = 0; i < 20; i++)
-			store.add(1420.0 + i);
-		
-		
 		PathSprite gridConfig = new PathSprite();
 	    gridConfig.setStroke(new RGB("#bbb"));
 	    gridConfig.setFill(new RGB("#ddd"));
@@ -93,7 +92,7 @@ public class AreaChart extends Composite
 	    areaSeries.addYField(doubleVP);	   
 	    areaSeries.addColor(new RGB("#FFF"));
 
-	    chart.setHeight(chartPanel.getOffsetHeight() - (showChartLabel ? 60 : 0) );
+	    chart.setHeight(chartPanel.getOffsetHeight());
 	    chart.setWidth(chartPanel.getOffsetWidth());
 	    chart.setStore(store);
 	    chart.setAnimationDuration(1750);
@@ -106,10 +105,20 @@ public class AreaChart extends Composite
 	    chartPanel.add(chart,new VerticalLayoutData(1.0, 1.0));
 	    if(showChartLabel == true)
 	    {
-		    chartText = new Label(store.get(store.size()-1).toString());
+		    chartText = new Label(store.size() > 1 ? store.get(store.size()-1).toString() : "");
 		    chartText.setStyleName("areaChartLabel");
 		    chartPanel.add(chartText);
 	    }
+	    
+	    
+	    Timer updateTimer = new Timer(){
+			@Override
+			public void run() {
+				age++;
+				updateTimerText.setText("last updated " +  age + " seconds ago");
+			}};
+		updateTimer.scheduleRepeating(1000);
+
 	    
 	}
 	
@@ -120,8 +129,10 @@ public class AreaChart extends Composite
 		chart.redrawChart();
 		if(chartText != null)
 			chartText.setText(d.toString());
+		age=0;
 	}
 	
+		
 	public void addValue(Double d, String label)
 	{
 		store.remove(0);
@@ -129,6 +140,14 @@ public class AreaChart extends Composite
 		chart.redrawChart();
 		if(chartText != null)
 			chartText.setText(label);
+		age=0;
+	}
+	
+	public void preloadValue(Double d)
+	{
+		store.add(d);
+		chart.redrawChart();
+		age=0;
 	}
 	
 	public void setHeader(String s)

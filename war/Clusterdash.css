@@ -19,10 +19,11 @@ body {
 	font-size: 20px;
 	position: relative;
 	left: 320px !important;
-	top: -100px !important;
+	top: -50px !important;
 	width: 30%;
 	font-family: Verdana;
 	z-index: 1;
+	text-shadow: 2px 2px 0px #FFF, -2px -2px 0px #FFF, 2px -2px 0px #FFF,-2px 2px 0px #FFF;
 }
 
 .chartHeaderText {
@@ -65,4 +66,12 @@ body {
 
 .widgetContainer {
 	padding: 20px;
+}
+.chartTimerText
+{
+	color: #789;
+	font-size: 10px;
+	text-align: center;
+	font-family: Verdana;
+	margin-top: 1px;
 }

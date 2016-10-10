@@ -30,6 +30,7 @@
   	<g:Label text="hello" ui:field="header" stylePrimaryName="chartHeaderText"/>
   	<container:VerticalLayoutContainer height="300" width="500" ui:field="chartPanel" stylePrimaryName="widgetContainer"/>
   	<g:Label text="world" ui:field="footer" stylePrimaryName="chartFooterText"/>
+  	<g:Label text="0" ui:field="updateTimerText" stylePrimaryName="chartTimerText"/>
    </container:VerticalLayoutContainer>
    
 </ui:UiBinder>

@@ -3,6 +3,7 @@ package org.vai.hpc.clusterdash.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,6 +20,8 @@ public class WidgetMonitor extends Composite
 	@UiField VerticalLayoutContainer chartPanel;
 	@UiField Label header;
 	@UiField Label footer;
+	@UiField Label updateTimerText;
+	int age=0;
 	final ListStore<Double> store = new ListStore<Double>(new ModelKeyProvider<Double>(){
 		@Override
 		public String getKey(Double item)
@@ -30,10 +33,18 @@ public class WidgetMonitor extends Composite
 		initWidget(uiBinder.createAndBindUi(this));
 		this.header.setText(header);
 		this.footer.setText(footer);
+		Timer updateTimer = new Timer(){
+ 			@Override
+ 			public void run() {
+ 				age++;
+ 				updateTimerText.setText("last updated " +  age + " seconds ago");
+ 			}};
+ 			updateTimer.scheduleRepeating(1000);
 	}
 	
 	public void setContent(Widget s)
 	{
+		age=0;
 		chartPanel.clear();
 		chartPanel.add(s);
 	}

@@ -15,6 +15,8 @@ public class ClusterData implements Serializable
 	ArrayList<String> users;
 	ArrayList<Integer> coresUsed;
 	ArrayList<Integer> jobIds;
+	ArrayList<Double> loadHistory;
+	ArrayList<Integer> diskHistory;
 	int KilobytesDiskActivtiy;
 	
 	public String getNodeName()
@@ -72,5 +74,17 @@ public class ClusterData implements Serializable
 	public void setKilobytesDiskActivtiy(int kilobytesDiskActivtiy)
 	{
 		KilobytesDiskActivtiy = kilobytesDiskActivtiy;
+	}
+	public ArrayList<Double> getLoadHistory() {
+		return loadHistory;
+	}
+	public void setLoadHistory(ArrayList<Double> loadHistory) {
+		this.loadHistory = loadHistory;
+	}
+	public ArrayList<Integer> getDiskHistory() {
+		return diskHistory;
+	}
+	public void setDiskHistory(ArrayList<Integer> diskHistory) {
+		this.diskHistory = diskHistory;
 	} 
 }

@@ -32,6 +32,7 @@
   		<g:Label text="777" stylePrimaryName="textChartMeasurement" ui:field="measurement"/>
   	</container:VerticalLayoutContainer>
   	<g:Label text="world" ui:field="footer" stylePrimaryName="chartFooterText"/>
+  	<g:Label text="0" ui:field="updateTimerText" stylePrimaryName="chartTimerText"/>
    </container:VerticalLayoutContainer>
    
 </ui:UiBinder>

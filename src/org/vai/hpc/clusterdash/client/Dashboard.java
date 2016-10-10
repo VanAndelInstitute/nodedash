@@ -41,13 +41,6 @@ public class Dashboard extends Composite
 		main.setWidth(com.google.gwt.user.client.Window.getClientWidth() - 20);
 		main.setScrollMode(ScrollMode.AUTO);
 		
-//		vlc.setWidth(com.google.gwt.user.client.Window.getClientWidth() / 2);
-//		vlc2.setWidth(com.google.gwt.user.client.Window.getClientWidth() / 2);
-//		vlc.setHeight(com.google.gwt.user.client.Window.getClientHeight()-20);
-//		vlc2.setHeight(com.google.gwt.user.client.Window.getClientHeight()-20);
-//		vlc.setScrollMode(ScrollMode.AUTO);
-//		vlc2.setScrollMode(ScrollMode.AUTO);
-		
 		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
 
 			@Override
@@ -61,8 +54,8 @@ public class Dashboard extends Composite
 		final AreaChart loadavg = new AreaChart("Total CPU Load", "Total calcuations being performed over time",false);
 		final TextMonitor runningJobs = new TextMonitor("Active Jobs", "The Number of currently Running Jobs");
 		final TextMonitor allTimeJobs = new TextMonitor("Jobs Completed","Number of Jobs completed since July 2016");
-		final WidgetMonitor topUsers = new WidgetMonitor("Active Users","The top active users online right now");
-		final AreaChart diskrate = new AreaChart("Data Growth", "Storage being written (megabytes per minute)",true);
+		final WidgetMonitor topUsers = new WidgetMonitor("Top Active Users","The top active users online right now");
+		final AreaChart diskrate = new AreaChart("Data Writes", "Storage being written (GigaBytes per minute)",true);
 		
 		vlc.add(nodespct);
 		vlc.add(runningJobs);
@@ -131,17 +124,35 @@ public class Dashboard extends Composite
 						}
 						
 						nodespct.setValue(0.0 + (int)(100.0 * (0.0 + usedcores) / (0.0 + totalcores)));
-						loadavg.addValue(totalLoad);
-						diskrate.addValue((0.0 + diskRateKB) / 1000.0, "" + (int)((0.0 + diskRateKB) / 1000.0) + " MB/min");
 						if(preloadAreaChart)
 						{
-							for(int i = 0; i<20;i++)
+							//preload the load history with last hour
+							if(result.get(0) != null && result.get(0).getLoadHistory() != null && result.get(0).getLoadHistory().size() > 20)
 							{
-								loadavg.addValue(totalLoad+i);
-								diskrate.addValue((0.0 + diskRateKB) / 1000.0, "" + (int)((0.0 + diskRateKB) / 1000.0) + " MB/min");
+								for(Double d: result.get(0).getLoadHistory())
+									loadavg.preloadValue(d);
+							}
+							else
+							{
+								for(int i = 0; i<60;i++)
+									loadavg.preloadValue(totalLoad+i);
+							}
+							
+							//preload the disk history with last hour
+							if(result.get(0) != null && result.get(0).getDiskHistory() != null && result.get(0).getDiskHistory().size() > 20)
+							{
+								for(int d: result.get(0).getDiskHistory())
+									diskrate.preloadValue(0.0 + d / 1000000.0);
+							}
+							else
+							{
+								for(int i = 0; i<60;i++)
+									diskrate.preloadValue((0.0 + diskRateKB) / 1000000.0);
 							}
 							preloadAreaChart=false;
-						}		
+						}
+						loadavg.addValue(totalLoad);
+						diskrate.addValue((0.0 + diskRateKB) / 1000000.0, "" + (int)((0.0 + diskRateKB) / 1000000.0) + " GB/min");
 						runningJobs.setValue("" + jobs.size());
 						allTimeJobs.setValue("" + lastJob);
 						
