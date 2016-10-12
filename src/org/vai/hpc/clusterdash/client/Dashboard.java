@@ -51,11 +51,11 @@ public class Dashboard extends Composite
 			}});
 		
 		final ClusterGuage nodespct = new ClusterGuage("Node utilization", "Percent Nodes currently being used");
-		final AreaChart loadavg = new AreaChart("Total CPU Load", "Total calcuations being performed over time",false);
+		final AreaChart loadavg = new AreaChart("Total CPU Load", "CPU Load over the last hour ",false);
 		final TextMonitor runningJobs = new TextMonitor("Active Jobs", "The Number of currently Running Jobs");
 		final TextMonitor allTimeJobs = new TextMonitor("Jobs Completed","Number of Jobs completed since July 2016");
 		final WidgetMonitor topUsers = new WidgetMonitor("Top Active Users","The top active users online right now");
-		final AreaChart diskrate = new AreaChart("Data Writes", "Storage being written (GigaBytes per minute)",true);
+		final AreaChart diskrate = new AreaChart("Data Writes", "GigaBytes per minute over the last hour",true);
 		
 		vlc.add(nodespct);
 		vlc.add(runningJobs);
@@ -153,10 +153,12 @@ public class Dashboard extends Composite
 						}
 						loadavg.addValue(totalLoad);
 						diskrate.addValue((0.0 + diskRateKB) / 1000000.0, "" + (int)((0.0 + diskRateKB) / 1000000.0) + " GB/min");
-						runningJobs.setValue("" + jobs.size());
-						allTimeJobs.setValue("" + lastJob);
+						runningJobs.setMeasurement("" + jobs.size());
+						allTimeJobs.setMeasurement("" + lastJob);
 						
 						//Create the top5 active users widget
+						if(topUsersCnt.containsKey("hpc.admin"))
+							topUsersCnt.remove("hpc.admin");
 						ArrayList<String> sortedUsers = new ArrayList<String>();
 						for(String s : topUsersCnt.keySet())
 							sortedUsers.add(s);
@@ -171,7 +173,7 @@ public class Dashboard extends Composite
 						
 						for (int i = 0; i<5 && i < sortedUsers.size();i++)
 						{
-							Label l = new Label(sortedUsers.get(i));
+							Label l = new Label((i+1) +  ". " + sortedUsers.get(i));
 							l.setStylePrimaryName("topUsersEntry");
 							topusersPanel.add(l);
 						}

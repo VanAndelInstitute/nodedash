@@ -29,7 +29,7 @@
   <container:VerticalLayoutContainer ui:field="mainPanel" height="400" width="520" stylePrimaryName="topLevelContainer">
   	<g:Label text="hello" ui:field="header" stylePrimaryName="chartHeaderText"/>
   	<container:VerticalLayoutContainer height="300" width="500" ui:field="chartPanel" stylePrimaryName="widgetContainer">
-  		<g:Label text="777" stylePrimaryName="textChartMeasurement" ui:field="measurement"/>
+  		<g:Label text="0" stylePrimaryName="textChartMeasurement" ui:field="measurement"/>
   	</container:VerticalLayoutContainer>
   	<g:Label text="world" ui:field="footer" stylePrimaryName="chartFooterText"/>
   	<g:Label text="0" ui:field="updateTimerText" stylePrimaryName="chartTimerText"/>

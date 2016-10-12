@@ -31,6 +31,7 @@ public class TextMonitor extends Composite
 		}});
 
     Label chartText;
+    Timer smoothTimer;
 	public TextMonitor(String header, String footer)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
@@ -45,15 +46,51 @@ public class TextMonitor extends Composite
  	updateTimer.scheduleRepeating(1000);
 	}
 	
-	public void setValue(String s)
+	public void setMeasurement(String s)
 	{
 		age=0;
 		measurement.setText(s);
+	}
+	public String getMeasurement()
+	{
+		return measurement.getText();
 	}
 	public void setHeader(String s)
 	{
 		header.setText(s);
 	}
+	public void setMeasurement(final int m,int timeSpanMS )
+	{
+		try{
+			int currentValue = Integer.parseInt(getMeasurement());
+			if(smoothTimer != null && smoothTimer.isRunning())
+				smoothTimer.cancel();
+			if(currentValue == 0)
+			{
+				setMeasurement("" + m);
+				return;
+			}
+			final int difference = m - currentValue;
+			int updateCycle = timeSpanMS / difference;
+			smoothTimer = new Timer(){
+				@Override
+				public void run() {
+					if(Integer.parseInt(getMeasurement())==m)
+					{
+						age=0;
+						this.cancel();
+						return;
+					}
+					setMeasurement("" + (Integer.parseInt(getMeasurement())+(difference>0?1:-1)));
+				}};
+			smoothTimer.scheduleRepeating(updateCycle);
+			
+		}catch(Exception e)
+		{
+			setMeasurement("" + m);
+		}
+	}
+	
 	public void setFooter(String s)
 	{
 		footer.setText(s);

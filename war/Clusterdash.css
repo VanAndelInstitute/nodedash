@@ -18,12 +18,12 @@ body {
 	color: #006aab;
 	font-size: 20px;
 	position: relative;
-	left: 320px !important;
-	top: -50px !important;
+	left: 360px !important;
+	top: -30px !important;
 	width: 30%;
 	font-family: Verdana;
 	z-index: 1;
-	text-shadow: 2px 2px 0px #FFF, -2px -2px 0px #FFF, 2px -2px 0px #FFF,-2px 2px 0px #FFF;
+	text-shadow: 1px 1px 1px #FFF, -1px -1px 1px #FFF, 1px -1px 1px #FFF,-1px 1px 1px #FFF;
 }
 
 .chartHeaderText {
@@ -55,7 +55,7 @@ body {
 }
 
 .topUsersEntry:before {
-    content:"• ";
+/*     content:"• "; */
 }
 .topUsersEntry {
 	color: #FFF;
