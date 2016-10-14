@@ -1,14 +1,13 @@
 package org.vai.hpc.clusterdash.client;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class ClusterData implements Serializable
+public class ClusterData implements IsSerializable
 {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	String nodeName;
 	int coresAvail;
 	double load;
