@@ -26,8 +26,14 @@
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
     <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
   </ui:with>
-<container:VerticalLayoutContainer ui:field="main" > 
- <container:HorizontalLayoutContainer ui:field="hlc"/>
+  <container:VerticalLayoutContainer ui:field="main" >
+  <container:child>
+  	<g:HorizontalPanel stylePrimaryName="hpc3headerPanel"><g:Image url="vailogo.jpg"/><g:Label text="HPC3: High Performance Cluster and Cloud Computing" stylePrimaryName="hpc3header"/></g:HorizontalPanel>
+  
+ 
+  
+  </container:child>
+  <container:HorizontalLayoutContainer ui:field="hlc"/>
 </container:VerticalLayoutContainer>
  
 <!-- <container:child> -->
