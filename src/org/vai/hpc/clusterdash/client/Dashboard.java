@@ -51,11 +51,11 @@ public class Dashboard extends Composite
 			}});
 		
 		final ClusterGuage nodespct = new ClusterGuage("Node utilization", "Percent Nodes currently being used");
-		final AreaChart loadavg = new AreaChart("Total CPU Load", "CPU Load over the last hour ",false);
-		final TextMonitor runningJobs = new TextMonitor("Active Jobs", "The Number of currently Running Jobs");
+		final AreaChart loadavg = new AreaChart("Total CPU Load", "CPU Load over the last hour ",false,1800.0);
+		final WidgetMonitor runningJobs = new WidgetMonitor("Job Status", "Cluster Job Scheduler Queue Status");
 		final TextMonitor allTimeJobs = new TextMonitor("Jobs Completed","Number of Jobs completed since July 2016");
 		final WidgetMonitor topUsers = new WidgetMonitor("Top Active Users","The top active users online right now");
-		final AreaChart diskrate = new AreaChart("Data Writes", "GigaBytes per minute over the last hour",true);
+		final AreaChart diskrate = new AreaChart("Data Writes", "GigaBytes per minute over the last hour",true,0.0);
 		
 		vlc.add(nodespct);
 		vlc.add(runningJobs);
@@ -153,8 +153,24 @@ public class Dashboard extends Composite
 						}
 						loadavg.addValue(totalLoad);
 						diskrate.addValue((0.0 + diskRateKB) / 1000000.0, "" + (int)((0.0 + diskRateKB) / 1000000.0) + " GB/min");
-						runningJobs.setMeasurement("" + jobs.size());
 						allTimeJobs.setMeasurement("" + lastJob);
+						
+						
+						//create the running and queued jobs count
+						VerticalLayoutContainer queuesPanel = new VerticalLayoutContainer(); 
+						Label rl1 = new Label((result.get(0).getQueueStat().get("R")).toString());
+						Label rl2 = new Label("Jobs Running");
+						Label ql1 = new Label((   result.get(0).getQueueStat().get("Q")  +  result.get(0).getQueueStat().get("H"))+ "");
+						Label ql2 = new Label("Jobs Waiting");
+						rl1.setStylePrimaryName("qstatRValue");
+						rl2.setStylePrimaryName("qstatRValueText");
+						ql1.setStylePrimaryName("qstatQValue");
+						ql2.setStylePrimaryName("qstatQValueText");
+						queuesPanel.add(rl1);
+						queuesPanel.add(rl2);
+						queuesPanel.add(ql1);
+						queuesPanel.add(ql2);
+						runningJobs.setContent(queuesPanel);
 						
 						//Create the top5 active users widget
 						if(topUsersCnt.containsKey("hpc.admin"))

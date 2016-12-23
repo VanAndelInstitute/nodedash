@@ -48,6 +48,41 @@ body {
 	vertical-align: middle;
 }
 
+.qstatRValue {
+	color: white;
+	background-color: #005a9b;
+	font-size: 80px;
+	text-align: center;
+	vertical-align: middle;
+}
+.qstatRValueText {
+	color: white;
+	background-color: #005a9b;
+	font-size: 30px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.qstatQValue {
+	color: white;
+	margin-top: 15px;
+	background-color: #005a9b;
+	font-size: 80px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.qstatQValueText {
+	color: white;
+	background-color: #005a9b;
+	font-size: 30px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+
+
+
 .topLevelContainer {
 	background-color: #005a9b;
 	margin: 10px 5px 10px 5px; ! important;

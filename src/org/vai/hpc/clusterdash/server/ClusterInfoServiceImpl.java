@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.vai.hpc.clusterdash.client.ClusterData;
 import org.vai.hpc.clusterdash.client.ClusterInfoService;
@@ -31,10 +32,10 @@ public class ClusterInfoServiceImpl extends RemoteServiceServlet implements Clus
 			int j=0;
 			ArrayList<Double> loadHist = new ArrayList<Double>();
 			ArrayList<Integer> diskHist = new ArrayList<Integer>();
+			HashMap<String,Integer> qstat = queueStat();
 			
 			while((line = in.readLine()) != null) 
 			{
-				
 				if(j==0)
 				{
 					String[] loadHistStr = line.split("\\s+");
@@ -56,6 +57,7 @@ public class ClusterInfoServiceImpl extends RemoteServiceServlet implements Clus
 						d.setCoresAvail(Integer.parseInt(parts[1]));
 						d.setKilobytesDiskActivtiy(Integer.parseInt(parts[2]));
 						d.setLoad(Double.parseDouble(parts[3]));
+						d.setQueueStat(qstat);
 						
 						if(parts.length > 4)
 						{
@@ -91,6 +93,35 @@ public class ClusterInfoServiceImpl extends RemoteServiceServlet implements Clus
 			e.printStackTrace();
 		}
 		return ret;
+	}
+	
+	HashMap<String,Integer> queueStat()
+	{
+		URL url;
+		HashMap<String,Integer> count = new HashMap<String,Integer>();
+		count.put("R", 0);
+		count.put("Q", 0);
+		count.put("H", 0);
+		count.put("C", 0);
+		count.put("E", 0);
+		try
+		{
+			url = new URL("http://login.hpc.vai.org/qstat.txt");
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			String line = null;
+			while((line = in.readLine()) != null) 
+			{
+				String[] fields = line.split("\\s+");
+				count.put(fields[9], count.get(fields[9]) + 1);
+				
+			}
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
+	
 	}
 
 

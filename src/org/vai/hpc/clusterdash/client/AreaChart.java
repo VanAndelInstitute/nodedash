@@ -34,6 +34,7 @@ public class AreaChart extends Composite
 	int age=0;
 	Boolean showChartLabel = false;
 	Label chartText;
+	Double chartMaximum;
 	int offset = 0; 
 	final ListStore<Double> store = new ListStore<Double>(new ModelKeyProvider<Double>(){
 		@Override
@@ -44,18 +45,19 @@ public class AreaChart extends Composite
 	final AreaSeries<Double> areaSeries = new AreaSeries<Double>();
     final Chart<Double> chart = new Chart<Double>();
 	 
-	public AreaChart(String header, String footer, Boolean showChartLabel)
+	public AreaChart(String header, String footer, Boolean showChartLabel,Double chartMaximum)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		this.header.setText(header);
 		this.footer.setText(footer);
 		this.showChartLabel = showChartLabel;
-	
+		this.chartMaximum = chartMaximum;
 		PathSprite gridConfig = new PathSprite();
 	    gridConfig.setStroke(new RGB("#bbb"));
 	    gridConfig.setFill(new RGB("#ddd"));
 	    gridConfig.setZIndex(1);
 	    gridConfig.setStrokeWidth(1);
+	    
 	    
 	    ValueProvider<Double,Double> doubleVP = new ValueProvider<Double,Double>(){
 
@@ -87,7 +89,9 @@ public class AreaChart extends Composite
 		axis.setLabelConfig(t);
 	    axis.addField(doubleVP);
 	    axis.setDisplayGrid(false);
-	  
+	    if(chartMaximum > 1.0)
+	    	axis.setMaximum(chartMaximum);
+	    
 	    areaSeries.setYAxisPosition(Position.LEFT);
 	    areaSeries.addYField(doubleVP);	   
 	    areaSeries.addColor(new RGB("#FFF"));

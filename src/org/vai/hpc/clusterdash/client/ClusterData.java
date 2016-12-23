@@ -1,6 +1,8 @@
 package org.vai.hpc.clusterdash.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class ClusterData implements IsSerializable
@@ -16,6 +18,7 @@ public class ClusterData implements IsSerializable
 	ArrayList<Integer> jobIds;
 	ArrayList<Double> loadHistory;
 	ArrayList<Integer> diskHistory;
+	HashMap<String,Integer> queueStat;
 	int KilobytesDiskActivtiy;
 	
 	public String getNodeName()
@@ -85,5 +88,13 @@ public class ClusterData implements IsSerializable
 	}
 	public void setDiskHistory(ArrayList<Integer> diskHistory) {
 		this.diskHistory = diskHistory;
+	}
+	public HashMap<String, Integer> getQueueStat()
+	{
+		return queueStat;
+	}
+	public void setQueueStat(HashMap<String, Integer> queueStat)
+	{
+		this.queueStat = queueStat;
 	} 
 }
