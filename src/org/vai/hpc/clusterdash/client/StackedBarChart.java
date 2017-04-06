@@ -72,6 +72,7 @@ public class StackedBarChart extends Composite
 		axis.setPosition(Position.BOTTOM);
 		TextSprite t = new TextSprite();
 		t.setFill(new RGB("#FFF"));
+		t.setFontSize(20);
 		axis.setLabelConfig(t);
 	    axis.addField(dataAccess.homeNormalized());
 	    axis.addField(dataAccess.scratchNormalized());

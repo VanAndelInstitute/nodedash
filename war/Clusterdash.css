@@ -113,14 +113,15 @@ body {
 .hpc3headerPanel
 {
 	background-color: #FFF;
-	width: 1585px;
+	width: 1360;
 }
 
 .hpc3header
 {
 	margin-top: 20px;
 	margin-left: 50px;
-	font-size: 36px;
+	margin-right: 50px;
+	font-size: 34px;
 	font-family: "Montserrat","Lucida Sans Unicode", "Lucida Grande", sans-serif;	
 	vertical-align: middle;
 }

@@ -42,7 +42,7 @@ public class Dashboard extends Composite
 			}});
 		
 	
-		final StackedBarChart quotas = new StackedBarChart("Storage: Percent Used", "(Groups under 50% not shown)",false,100.0);
+		final StackedBarChart quotas = new StackedBarChart("Storage: Percent Used", "Yellow = Primary, White = Secondary. (Groups under 50% not shown)",false,100.0);
 		
 		vlc.add(quotas);
 		hlc.add(vlc);

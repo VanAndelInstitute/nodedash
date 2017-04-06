@@ -28,7 +28,7 @@
   </ui:with>
   <container:VerticalLayoutContainer ui:field="main" >
   <container:child>
-  	<g:HorizontalPanel stylePrimaryName="hpc3headerPanel"><g:Image url="vailogo.jpg"/><g:Label text="HPC3: High Performance Cluster and Cloud Computing" stylePrimaryName="hpc3header"/></g:HorizontalPanel>
+  	<g:HorizontalPanel  stylePrimaryName="hpc3headerPanel"><g:Image url="vailogo.jpg"/><g:Label text="HPC3: High Performance Cluster and Cloud Computing" stylePrimaryName="hpc3header"/></g:HorizontalPanel>
   
  
   
