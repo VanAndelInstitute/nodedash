@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 import org.vai.hpc.clusterdash.client.ClusterData;
 import org.vai.hpc.clusterdash.client.ClusterInfoService;
+import org.vai.hpc.clusterdash.client.QuotaData;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -122,6 +124,61 @@ public class ClusterInfoServiceImpl extends RemoteServiceServlet implements Clus
 		}
 		return count;
 	
+	}
+
+	@Override
+	public ArrayList<QuotaData> getQuota()
+	{
+		ArrayList<QuotaData> ret = new ArrayList<QuotaData>();
+		HashMap<String,QuotaData> quotaMap = new HashMap<String,QuotaData>();
+		try
+		{
+			URL url = new URL("http://login.hpc.vai.org/quotatable.txt");
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			String line = null;
+			while((line = in.readLine()) != null) 
+			{
+				QuotaData d;
+				String[] parts = line.split("\\s+");
+				if(quotaMap.containsKey(parts[0]))
+					d = quotaMap.get(parts[0]);
+				else
+					d = new QuotaData();
+				
+				if(parts[1].contains("atch"))
+				{
+					d.setFileset(parts[0]);
+					try {
+						d.setScratchUsed(Long.parseLong(parts[3]));
+						d.setScratchTotal(Long.parseLong(parts[5]));
+					} catch (Exception e)
+					{
+						d.setScratchUsed(0l);
+						d.setScratchTotal(0l);
+					}
+				}
+				else if(parts[1].contains("ome"))
+				{
+					d.setFileset(parts[0]);
+					try {
+						d.setHomeUsed(Long.parseLong(parts[3]));
+						d.setHomeTotal(Long.parseLong(parts[5]));
+					} catch (Exception e)
+					{
+						d.setHomeUsed(0l);
+						d.setHomeTotal(0l);
+					}
+				}
+				quotaMap.put(parts[0], d);
+				
+			}
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ret.addAll(quotaMap.values());
+		return ret;
 	}
 
 

@@ -10,4 +10,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface ClusterInfoServiceAsync
 {
 	void getCluster(AsyncCallback<ArrayList<ClusterData>> callback);
+	void getQuota(AsyncCallback<ArrayList<QuotaData>> callback);
 }

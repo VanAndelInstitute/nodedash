@@ -12,4 +12,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ClusterInfoService extends RemoteService
 {
 	ArrayList<ClusterData> getCluster();
+	ArrayList<QuotaData> getQuota();
 }
