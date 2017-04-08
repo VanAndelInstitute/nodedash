@@ -17,6 +17,11 @@ public class QuotaData implements IsSerializable
 		return fileset + "\t" + getHomeNormalized() + "\t" + getScratchNormalized();
 	}
 	
+	public float getTotalUsedNormalized()
+	{
+		return getHomeNormalized() + getScratchNormalized();
+	}
+	
 	public Float getHomeNormalized()
 	{
 		return 100.0f *(0.0f + getHomeUsed()) / (0.1f + getHomeTotal() + getScratchTotal());		
@@ -39,6 +44,10 @@ public class QuotaData implements IsSerializable
 	public String getFileset()
 	{
 		return fileset;
+	}
+	public String getFilesetFormatted()
+	{
+		return fileset.toUpperCase();
 	}
 	public void setFileset(String fileset)
 	{

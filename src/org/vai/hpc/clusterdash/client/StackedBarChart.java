@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
@@ -16,12 +17,14 @@ import com.sencha.gxt.chart.client.chart.Chart.Position;
 import com.sencha.gxt.chart.client.chart.axis.CategoryAxis;
 import com.sencha.gxt.chart.client.chart.axis.NumericAxis;
 import com.sencha.gxt.chart.client.chart.series.BarSeries;
+import com.sencha.gxt.chart.client.chart.series.Series.LabelPosition;
+import com.sencha.gxt.chart.client.chart.series.SeriesLabelConfig;
+import com.sencha.gxt.chart.client.chart.series.SeriesLabelProvider;
 import com.sencha.gxt.chart.client.draw.RGB;
 import com.sencha.gxt.chart.client.draw.path.PathSprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite.TextBaseline;
 import com.sencha.gxt.core.client.ValueProvider;
-import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
@@ -47,7 +50,10 @@ public class StackedBarChart extends Composite
 	  public interface DataPropertyAccess extends PropertyAccess<QuotaData> {
   	    ValueProvider<QuotaData, Float> scratchNormalized();
   	    ValueProvider<QuotaData, Float> homeNormalized();
+  	    ValueProvider<QuotaData, Float> totalUsedNormalized();
   	    ValueProvider<QuotaData, String> fileset();
+  	  ValueProvider<QuotaData, String> filesetFormatted();
+  	  
   	    ModelKeyProvider<QuotaData> id();
   	  }
   
@@ -60,16 +66,14 @@ public class StackedBarChart extends Composite
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		chartPanel.setHeight(com.google.gwt.user.client.Window.getClientHeight() - 200);
-		
-		//chartPanel.setScrollMode(ScrollMode.AUTO);
-		
+		chartPanel.setHeight(com.google.gwt.user.client.Window.getClientHeight() - 125);
 		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
 
 			@Override
 			public void onResize(ResizeEvent event)
 			{
-				chartPanel.setHeight(event.getHeight()-200);
+				chartPanel.setHeight(event.getHeight()-195);
+				chartPanel.setWidth(event.getWidth());
 			}});
 		
 		
@@ -90,30 +94,59 @@ public class StackedBarChart extends Composite
 		t.setFill(new RGB("#FFF"));
 		t.setFontSize(20);
 		axis.setLabelConfig(t);
-	    axis.addField(dataAccess.homeNormalized());
-	    axis.addField(dataAccess.scratchNormalized());
+		axis.addField(dataAccess.totalUsedNormalized());
+	    //axis.addField(dataAccess.homeNormalized());
+	    //axis.addField(dataAccess.scratchNormalized());
 	    axis.setDisplayGrid(true);
 	    axis.setMaximum(100);
 	    axis.setMinimum(0);
 	    
 	    CategoryAxis<QuotaData, String> catAxis = new CategoryAxis<QuotaData, String>();
 	    catAxis.setPosition(Position.LEFT);
-	    catAxis.setField(dataAccess.fileset());
+	    
+	    catAxis.setField(dataAccess.filesetFormatted());
 	    TextSprite c = new TextSprite();
 		c.setFill(new RGB("#FFF"));
 		c.setFontSize(20);
 		c.setTextBaseline(TextBaseline.MIDDLE);
 	    catAxis.setLabelConfig(c);
 	    
+	    SeriesLabelConfig<QuotaData> labelConfig = new SeriesLabelConfig<QuotaData>();
+	    labelConfig.setLabelPosition(LabelPosition.END);
+	    labelConfig.setLabelContrast(true);
+	    labelConfig.setLabelProvider(new SeriesLabelProvider<QuotaData>(){
+
+			@Override
+			public String getLabel(QuotaData item, ValueProvider<? super QuotaData, ? extends Number> valueProvider)
+			{
+				float TB = 1024*1024*1024;
+				return "Primary: " + NumberFormat.getFormat("#0.0").format((1.0 * (item.getHomeUsed() / TB))) + "TB / " +  NumberFormat.getFormat("#0.0").format(item.getHomeTotal() / TB) + "TB  --- " +
+				"Secondary: " + NumberFormat.getFormat("#0.0").format((1.0 * (item.getScratchUsed() / TB))) + "TB  / " +  NumberFormat.getFormat("#0.0").format(item.getScratchTotal() / TB) + "TB";		
+//				if(valueProvider == dataAccess.homeNormalized())
+//					if(item.getHomeTotal() == 0)
+//						return "";
+//					else
+//						return NumberFormat.getFormat("#0.0").format((1.0 * (item.getHomeUsed() / TB))) + "TB used / " + (item.getHomeTotal() / TB) + "TB total";
+//				else
+//					if(item.getScratchTotal() == 0)
+//						return "";
+//				else
+//					return NumberFormat.getFormat("#0.0").format((1.0 * (item.getScratchUsed() / TB))) + "TB used / " + (item.getScratchTotal() / TB) + "TB total";
+			}});
 	    
 	    final BarSeries<QuotaData> bar = new BarSeries<QuotaData>();
 	    bar.setYAxisPosition(Position.BOTTOM);
-	    bar.addYField(dataAccess.homeNormalized());
-	    bar.addYField(dataAccess.scratchNormalized());
-	    bar.addColor(new RGB("#FF0"));
-	    bar.addColor(new RGB("#FFF"));
-	    bar.setStacked(true);
+	    bar.addYField(dataAccess.totalUsedNormalized());
+	   // bar.addYField(dataAccess.homeNormalized());
+	    //bar.addYField(dataAccess.scratchNormalized());
+	    bar.addColor(new RGB("#FF4"));
+	    //bar.addColor(new RGB("#FFF"));
+	    //bar.setStacked(true);
 	    bar.setHighlighting(true);
+	    bar.setLabelConfig(labelConfig);
+	    
+	   
+	    
 	    
 
 	    chart.setHeight(chartPanel.getOffsetHeight());
@@ -146,7 +179,11 @@ public class StackedBarChart extends Composite
 
 	    
 	}
-	
+	public void addValues(ArrayList<QuotaData> data,int cutoff)
+	{
+		setFooter("(Groups under " + cutoff + "% not shown)");
+		addValues(data);
+	}
 	public void addValues(ArrayList<QuotaData> data)
 	{
 		store.clear();

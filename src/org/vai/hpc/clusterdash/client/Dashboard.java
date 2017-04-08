@@ -27,8 +27,8 @@ public class Dashboard extends Composite
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		main.setWidth(com.google.gwt.user.client.Window.getClientWidth() - 10);
-		main.setHeight(com.google.gwt.user.client.Window.getClientHeight() - 20);
+		main.setWidth(com.google.gwt.user.client.Window.getClientWidth() - 0);
+		main.setHeight(com.google.gwt.user.client.Window.getClientHeight() - 0);
 		main.setScrollMode(ScrollMode.AUTO);
 		
 		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
@@ -36,12 +36,12 @@ public class Dashboard extends Composite
 			@Override
 			public void onResize(ResizeEvent event)
 			{
-				main.setWidth(event.getWidth()-10);
-				main.setHeight(event.getHeight()-20);
+				main.setWidth(event.getWidth()-0);
+				main.setHeight(event.getHeight()-0);
 			}});
 		
 	
-		final StackedBarChart quotas = new StackedBarChart("Storage: Percent Used", "Yellow = Primary, White = Secondary. (Groups under 50% not shown)",false,100.0);
+		final StackedBarChart quotas = new StackedBarChart("Storage: Percent Used", "(Groups under 50% not shown)",false,100.0);
 		
 		vlc.add(quotas);
 		main.add(vlc);
@@ -64,12 +64,22 @@ public class Dashboard extends Composite
 					public void onSuccess(ArrayList<QuotaData> result)
 					{
 						ArrayList<QuotaData> filtered = new ArrayList<QuotaData>();
+						int cutoff = 50;
 						for(QuotaData d : result)
 						{
-							if(d.getHomeNormalized() + d.getScratchNormalized() > 49)
-								filtered.add(d);
+							
+							try {
+								cutoff = Integer.parseInt(com.google.gwt.user.client.Window.Location.getParameter("cutoff"));
+								if(d.getTotalUsedNormalized() >= cutoff)
+									filtered.add(d);
+							} catch (Exception e)
+							{
+								cutoff=50;
+								if(d.getTotalUsedNormalized() >= cutoff )
+									filtered.add(d);
+							}							
 						}
-						quotas.addValues(filtered);
+						quotas.addValues(filtered,cutoff);
 					}});
 			}};
 		t.run();

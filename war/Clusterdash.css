@@ -38,6 +38,7 @@ body {
 	font-size: 20px;
 	text-align: center;
 	font-family: Verdana;
+	
 }
 
 .textChartMeasurement {
@@ -118,6 +119,8 @@ body {
 
 .hpc3header
 {
+	float: left; 
+	white-space: nowrap;
 	margin-top: 20px;
 	margin-left: 50px;
 	margin-right: 50px;
