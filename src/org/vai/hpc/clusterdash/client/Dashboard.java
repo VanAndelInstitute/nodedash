@@ -11,7 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
-import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
 public class Dashboard extends Composite 
@@ -22,14 +21,14 @@ public class Dashboard extends Composite
 	interface DashboardUiBinder extends UiBinder<Widget, Dashboard> {}
 	private final ClusterInfoServiceAsync clusterService = GWT.create(ClusterInfoService.class);
 	VerticalLayoutContainer vlc = new VerticalLayoutContainer();
-	@UiField HorizontalLayoutContainer hlc;
+	//@UiField HorizontalLayoutContainer hlc;
 	@UiField VerticalLayoutContainer main;
 	public Dashboard()
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		main.setWidth(com.google.gwt.user.client.Window.getClientWidth() - 10);
-		main.setWidth(com.google.gwt.user.client.Window.getClientWidth() - 20);
+		main.setHeight(com.google.gwt.user.client.Window.getClientHeight() - 20);
 		main.setScrollMode(ScrollMode.AUTO);
 		
 		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
@@ -45,7 +44,7 @@ public class Dashboard extends Composite
 		final StackedBarChart quotas = new StackedBarChart("Storage: Percent Used", "Yellow = Primary, White = Secondary. (Groups under 50% not shown)",false,100.0);
 		
 		vlc.add(quotas);
-		hlc.add(vlc);
+		main.add(vlc);
 		
 		Timer t = new Timer(){
 

@@ -85,7 +85,7 @@ body {
 
 .topLevelContainer {
 	background-color: #005a9b;
-	margin: 10px 5px 10px 5px; ! important;
+	margin-top: 10px; ! important;
 	padding: 10px;
 }
 
@@ -113,7 +113,7 @@ body {
 .hpc3headerPanel
 {
 	background-color: #FFF;
-	width: 1360;
+/* 	width: 1360; */
 }
 
 .hpc3header

@@ -3,7 +3,8 @@ package org.vai.hpc.clusterdash.client;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
-
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
@@ -20,6 +21,7 @@ import com.sencha.gxt.chart.client.draw.path.PathSprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite.TextBaseline;
 import com.sencha.gxt.core.client.ValueProvider;
+import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
@@ -57,6 +59,20 @@ public class StackedBarChart extends Composite
 	public StackedBarChart(String header, String footer, Boolean showChartLabel,Double chartMaximum)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		chartPanel.setHeight(com.google.gwt.user.client.Window.getClientHeight() - 200);
+		
+		//chartPanel.setScrollMode(ScrollMode.AUTO);
+		
+		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
+
+			@Override
+			public void onResize(ResizeEvent event)
+			{
+				chartPanel.setHeight(event.getHeight()-200);
+			}});
+		
+		
 		this.header.setText(header);
 		this.footer.setText(footer);
 		this.showChartLabel = showChartLabel;

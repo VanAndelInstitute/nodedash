@@ -24,23 +24,14 @@
 <!--   </ui:with> -->
 
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
-    <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
+    <ui:attributes width="1" height="1.0"  margins="{topFormMargins}" />
   </ui:with>
-  <container:VerticalLayoutContainer ui:field="main" >
+    
+  <container:VerticalLayoutContainer  ui:field="main" layoutData="{verticalLayoutData}">
   <container:child>
-  	<g:HorizontalPanel  stylePrimaryName="hpc3headerPanel"><g:Image url="vailogo.jpg"/><g:Label text="HPC3: High Performance Cluster and Cloud Computing" stylePrimaryName="hpc3header"/></g:HorizontalPanel>
-  
- 
-  
-  </container:child>
-  <container:HorizontalLayoutContainer ui:field="hlc"/>
-</container:VerticalLayoutContainer>
- 
-<!-- <container:child> -->
-<!--   <container:HorizontalLayoutContainer ui:field="hlc1" height="400" /> -->
-<!--  </container:child> -->
-<!--  <container:child> -->
-<!--   <container:HorizontalLayoutContainer ui:field="hlc2" height="400"/> -->
-<!--   </container:child> -->
-
+  	<g:HorizontalPanel  width="100%" stylePrimaryName="hpc3headerPanel">
+  		<g:Image url="vailogo.jpg"/><g:Label text="HPC3: High Performance Cluster and Cloud Computing" stylePrimaryName="hpc3header"/>
+  	</g:HorizontalPanel>
+   </container:child>
+  </container:VerticalLayoutContainer>
 </ui:UiBinder>

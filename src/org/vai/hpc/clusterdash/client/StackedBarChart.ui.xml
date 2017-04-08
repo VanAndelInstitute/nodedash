@@ -27,12 +27,13 @@
     <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
   </ui:with>
    <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData2">
-    <ui:attributes width="1" height="1"   />
+    <ui:attributes width="1" height="1.0"   />
   </ui:with>
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData3">
-    <ui:attributes width="1210" height="700"   />
+    <ui:attributes width="1.0" height=".9"   />
   </ui:with>
-  <container:VerticalLayoutContainer ui:field="mainPanel" layoutData="{verticalLayoutData2}" stylePrimaryName="topLevelContainer">
+ 
+  <container:VerticalLayoutContainer ui:field="mainPanel"  layoutData="{verticalLayoutData3}" stylePrimaryName="topLevelContainer">
   	<g:Label text="hello" ui:field="header" stylePrimaryName="chartHeaderText"/>
   	<container:VerticalLayoutContainer layoutData="{verticalLayoutData3}" ui:field="chartPanel"/>
   	<g:Label text="world" ui:field="footer" stylePrimaryName="chartFooterText"/>
