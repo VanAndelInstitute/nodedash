@@ -142,6 +142,8 @@ public class ClusterInfoServiceImpl extends RemoteServiceServlet implements Clus
 			{
 				QuotaData d;
 				String[] parts = line.split("\\s+");
+				if(parts.length < 2)
+					continue;
 				if(quotaMap.containsKey(parts[0]))
 					d = quotaMap.get(parts[0]);
 				else
